@@ -1,0 +1,14 @@
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# HTTP client for calling AI server
+requests>=2.31.0
+
+# Data validation
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+email-validator>=2.1.0
+
+# Firebase (optional; app falls back to in-memory storage if not configured)
+firebase-admin>=6.5.0

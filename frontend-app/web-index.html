@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agriculture AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .input::placeholder {
+            color: #999;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .button:hover::before {
+            left: 100%;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button.secondary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .button.secondary:hover {
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+        
+        .button.danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+        
+        .button.danger:hover {
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .feature-button {
+            padding: 20px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .feature-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+        
+        .result-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-value {
+            color: #666;
+            margin-top: 8px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .crop-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .crop-item:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .crop-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .crop-details {
+            color: #666;
+            margin: 8px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-input {
+            margin-bottom: 20px;
+        }
+        
+        .file-input input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #4CAF50;
+            border-radius: 12px;
+            background: rgba(76, 175, 80, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input input[type="file"]:hover {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #45a049;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(76, 175, 80, 0.3);
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .confidence-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .confidence-high {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+        
+        .confidence-medium {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+        }
+        
+        .confidence-low {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .treatment-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .treatment-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2196F3;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .treatment-content {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        textarea.input {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .price-tag {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        const api = axios.create({
+            baseURL: API_BASE_URL,
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        function App() {
+            const [currentScreen, setCurrentScreen] = useState('login');
+            const [user, setUser] = useState(null);
+            const [loading, setLoading] = useState(false);
+            const [result, setResult] = useState(null);
+            const [crops, setCrops] = useState([]);
+
+            const login = async (email, password) => {
+                try {
+                    const response = await api.post('/login', { email, password });
+                    setUser(response.data.user);
+                    setCurrentScreen('home');
+                    alert('Login successful!');
+                } catch (error) {
+                    alert('Login failed: ' + (error.response?.data?.detail || error.message));
+                }
+            };
+
+            const register = async (name, email, password) => {
+                try {
+                    const response = await api.post('/register', { name, email, password });
+                    alert('Registration successful! Please login.');
+                    setCurrentScreen('login');
+                } catch (error) {
+                    alert('Registration failed: ' + (error.response?.data?.detail || error.message));
+                }
+            };
+
+            const sellCrop = async (cropData) => {
+                try {
+                    const response = await api.post('/sell-crop', cropData);
+                    alert('Crop listed successfully!');
+                    setCurrentScreen('home');
+                } catch (error) {
+                    alert('Failed to list crop: ' + (error.response?.data?.detail || error.message));
+                }
+            };
+
+            const buyCrops = async () => {
+                try {
+                    const response = await api.get('/buy-crops');
+                    setCrops(response.data.items || []);
+                } catch (error) {
+                    alert('Failed to load crops: ' + (error.response?.data?.detail || error.message));
+                    // Mock data for demo
+                    setCrops([
+                        { id: '1', crop_name: 'Tomatoes', quantity_kg: 50, price_per_kg: 25, location: 'Bengaluru', notes: 'Fresh organic tomatoes' },
+                        { id: '2', crop_name: 'Potatoes', quantity_kg: 100, price_per_kg: 20, location: 'Mumbai', notes: 'Premium quality potatoes' },
+                    ]);
+                }
+            };
+
+            const predictDisease = async (file) => {
+                setLoading(true);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await axios.post(`${API_BASE_URL}/predict`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+                    setResult(response.data);
+                    setCurrentScreen('result');
+                } catch (error) {
+                    alert('Failed to analyze image: ' + (error.response?.data?.detail || error.message));
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            if (currentScreen === 'login') {
+                return <LoginScreen onLogin={login} onRegister={() => setCurrentScreen('register')} />;
+            } else if (currentScreen === 'register') {
+                return <RegisterScreen onRegister={register} onLogin={() => setCurrentScreen('login')} />;
+            } else if (currentScreen === 'home') {
+                return <HomeScreen user={user} onNavigate={setCurrentScreen} onBuyCrops={buyCrops} />;
+            } else if (currentScreen === 'scan') {
+                return <ScanScreen onPredict={predictDisease} loading={loading} />;
+            } else if (currentScreen === 'result') {
+                return <ResultScreen result={result} onNavigate={setCurrentScreen} />;
+            } else if (currentScreen === 'sell') {
+                return <SellCropScreen onSellCrop={sellCrop} />;
+            } else if (currentScreen === 'buy') {
+                return <BuyCropScreen crops={crops} />;
+            }
+        }
+
+        function LoginScreen({ onLogin, onRegister }) {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onLogin(email, password);
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-seedling"></i> Smart Agriculture AI</h1>
+                        <p>Login to transform your farming experience</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-sign-in-alt"></i> Welcome Back</h3>
+                        <form onSubmit={handleSubmit}>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-envelope" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="email"
+                                    className="input"
+                                    placeholder="Enter your email address"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-lock" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="password"
+                                    className="input"
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            <button type="submit" className="button">
+                                <i className="fas fa-sign-in-alt"></i> Login to Dashboard
+                            </button>
+                        </form>
+                        <button className="button secondary" onClick={onRegister}>
+                            <i className="fas fa-user-plus"></i> Don't have an account? Register
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function RegisterScreen({ onRegister, onLogin }) {
+            const [name, setName] = useState('');
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onRegister(name, email, password);
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-user-plus"></i> Create Account</h1>
+                        <p>Join the future of smart farming</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-user-circle"></i> Get Started Today</h3>
+                        <form onSubmit={handleSubmit}>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-user" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="Enter your full name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-envelope" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="email"
+                                    className="input"
+                                    placeholder="Enter your email address"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-lock" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="password"
+                                    className="input"
+                                    placeholder="Create a strong password (min 6 characters)"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    minLength="6"
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            <button type="submit" className="button">
+                                <i className="fas fa-rocket"></i> Start Your Journey
+                            </button>
+                        </form>
+                        <button className="button secondary" onClick={onLogin}>
+                            <i className="fas fa-sign-in-alt"></i> Already have an account? Login
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function HomeScreen({ user, onNavigate, onBuyCrops }) {
+            const handleBuyCrops = () => {
+                onBuyCrops();
+                onNavigate('buy');
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-leaf"></i> Smart Agriculture AI</h1>
+                        <p>Welcome back, {user?.name || 'Farmer'}! 🌱</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-th-large"></i> Smart Services</h3>
+                        <div className="feature-grid">
+                            <button className="feature-button" onClick={() => onNavigate('scan')}>
+                                <i className="fas fa-camera"></i> Scan Crop Disease
+                            </button>
+                            <button className="feature-button" onClick={() => onNavigate('sell')}>
+                                <i className="fas fa-store"></i> Sell Your Produce
+                            </button>
+                            <button className="feature-button" onClick={handleBuyCrops}>
+                                <i className="fas fa-shopping-cart"></i> Buy Fresh Crops
+                            </button>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-chart-line"></i> Your Farm Dashboard</h3>
+                        <div className="stats-grid">
+                            <div className="stat-card">
+                                <div className="stat-number">12</div>
+                                <div className="stat-label"><i className="fas fa-search"></i> Crops Scanned Today</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">8</div>
+                                <div className="stat-label"><i className="fas fa-list"></i> Active Listings</div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-number">📈</div>
+                                <div className="stat-label"><i className="fas fa-trending-up"></i> Market Price Trend</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-history"></i> Recent Activity</h3>
+                        <div className="result-item">
+                            <div className="result-label">Latest Scan</div>
+                            <div className="result-value">Tomato disease detected - Early Blight</div>
+                        </div>
+                        <div className="result-item">
+                            <div className="result-label">Recent Sale</div>
+                            <div className="result-value">Sold 50kg of organic tomatoes</div>
+                        </div>
+                        <div className="result-item">
+                            <div className="result-label">Purchase</div>
+                            <div className="result-value">Bought fresh potatoes from local farm</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ScanScreen({ onPredict, loading }) {
+            const handleFileChange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    onPredict(file);
+                }
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-microscope"></i> AI Disease Scanner</h1>
+                        <p>Upload a leaf photo for instant AI analysis</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-camera-retro"></i> Capture & Analyze</h3>
+                        <div className="file-input">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                disabled={loading}
+                            />
+                            <p style={{textAlign: 'center', marginTop: '10px', color: '#666', fontSize: '14px'}}>
+                                <i className="fas fa-info-circle"></i> Supported formats: JPG, PNG, HEIC
+                            </p>
+                        </div>
+                        {loading && (
+                            <div className="loading">
+                                <div className="loading-spinner"></div>
+                                <p><i className="fas fa-brain"></i> AI is analyzing your crop...</p>
+                                <p style={{fontSize: '14px', marginTop: '10px'}}>This usually takes 10-15 seconds</p>
+                            </div>
+                        )}
+                        {!loading && (
+                            <div style={{textAlign: 'center', marginBottom: '20px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
+                                    <div style={{textAlign: 'center'}}>
+                                        <i className="fas fa-check-circle" style={{fontSize: '24px', color: '#4CAF50'}}></i>
+                                        <p style={{fontSize: '12px', marginTop: '5px'}}>99% Accuracy</p>
+                                    </div>
+                                    <div style={{textAlign: 'center'}}>
+                                        <i className="fas fa-clock" style={{fontSize: '24px', color: '#2196F3'}}></i>
+                                        <p style={{fontSize: '12px', marginTop: '5px'}}>Instant Results</p>
+                                    </div>
+                                    <div style={{textAlign: 'center'}}>
+                                        <i className="fas fa-seedling" style={{fontSize: '24px', color: '#FF9800'}}></i>
+                                        <p style={{fontSize: '12px', marginTop: '5px'}}>40+ Diseases</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <button 
+                            className="button danger" 
+                            onClick={() => window.history.back()}
+                            disabled={loading}
+                        >
+                            <i className="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function ResultScreen({ result, onNavigate }) {
+            const getConfidenceClass = (confidence) => {
+                if (confidence >= 0.8) return 'confidence-high';
+                if (confidence >= 0.6) return 'confidence-medium';
+                return 'confidence-low';
+            };
+
+            const getConfidenceText = (confidence) => {
+                if (confidence >= 0.8) return 'High Confidence';
+                if (confidence >= 0.6) return 'Medium Confidence';
+                return 'Low Confidence';
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-clipboard-check"></i> Analysis Results</h1>
+                        <p>AI-powered diagnosis complete</p>
+                    </div>
+                    
+                    <div className="card">
+                        <h3><i className="fas fa-virus"></i> Disease Detection</h3>
+                        <div className={`confidence-badge ${getConfidenceClass(result?.confidence || 0)}`}>
+                            <i className="fas fa-chart-line"></i> {Math.round((result?.confidence || 0) * 100)}% - {getConfidenceText(result?.confidence || 0)}
+                        </div>
+                        <div className="result-item">
+                            <div className="result-label"><i className="fas fa-bug"></i> Detected Disease:</div>
+                            <div className="result-value" style={{fontSize: '18px', fontWeight: '600', color: '#333'}}>
+                                {result?.disease || 'Unknown'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <h3><i className="fas fa-pills"></i> Treatment Plan</h3>
+                        <div className="treatment-section">
+                            <div className="treatment-title">
+                                <i className="fas fa-prescription-bottle"></i> Recommended Medicine
+                            </div>
+                            <div className="treatment-content">
+                                {result?.medicine || 'No specific medicine required'}
+                            </div>
+                        </div>
+                        
+                        <div className="treatment-section">
+                            <div className="treatment-title">
+                                <i className="fas fa-flask"></i> Fertilizer Treatment
+                            </div>
+                            <div className="treatment-content">
+                                {result?.fertilizer || 'Standard fertilization recommended'}
+                            </div>
+                        </div>
+                        
+                        <div className="treatment-section">
+                            <div className="treatment-title">
+                                <i className="fas fa-lightbulb"></i> Prevention Tips
+                            </div>
+                            <div className="treatment-content">
+                                {result?.tips || 'Continue regular monitoring and good agricultural practices'}
+                            </div>
+                        </div>
+                    </div>
+
+                    {result?.error && (
+                        <div className="card">
+                            <div className="result-item" style={{borderLeftColor: '#f44336'}}>
+                                <div className="result-label"><i className="fas fa-exclamation-triangle"></i> Note:</div>
+                                <div className="result-value" style={{color: '#f44336'}}>
+                                    {result.error}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="card">
+                        <button className="button" onClick={() => onNavigate('scan')}>
+                            <i className="fas fa-redo"></i> Scan Another Crop
+                        </button>
+                        <button className="button secondary" onClick={() => onNavigate('home')}>
+                            <i className="fas fa-home"></i> Back to Dashboard
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function SellCropScreen({ onSellCrop }) {
+            const [cropName, setCropName] = useState('');
+            const [quantity, setQuantity] = useState('');
+            const [price, setPrice] = useState('');
+            const [location, setLocation] = useState('');
+            const [notes, setNotes] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const cropData = {
+                    seller_user_id: 'demo_user',
+                    crop_name: cropName,
+                    quantity_kg: parseFloat(quantity),
+                    price_per_kg: parseFloat(price),
+                    location: location,
+                    notes: notes || '',
+                };
+                onSellCrop(cropData);
+            };
+
+            const totalValue = quantity && price ? (parseFloat(quantity) * parseFloat(price)).toFixed(2) : '0.00';
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-store"></i> Sell Your Produce</h1>
+                        <p>Connect with buyers and grow your business</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-tag"></i> Create Listing</h3>
+                        <form onSubmit={handleSubmit}>
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-seedling" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="What are you selling? (e.g., Tomatoes, Wheat) *"
+                                    value={cropName}
+                                    onChange={(e) => setCropName(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            
+                            <div style={{display: 'flex', gap: '10px'}}>
+                                <div style={{position: 'relative', flex: 1}}>
+                                    <i className="fas fa-weight" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder="Quantity (kg) *"
+                                        value={quantity}
+                                        onChange={(e) => setQuantity(e.target.value)}
+                                        required
+                                        style={{paddingLeft: '45px'}}
+                                    />
+                                </div>
+                                <div style={{position: 'relative', flex: 1}}>
+                                    <i className="fas fa-rupee-sign" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder="Price per kg *"
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                        required
+                                        style={{paddingLeft: '45px'}}
+                                    />
+                                </div>
+                            </div>
+                            
+                            {quantity && price && (
+                                <div className="price-tag">
+                                    <i className="fas fa-calculator"></i> Total Value: ₹{totalValue}
+                                </div>
+                            )}
+                            
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-map-marker-alt" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    placeholder="Your location (city, state) *"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    required
+                                    style={{paddingLeft: '45px'}}
+                                />
+                            </div>
+                            
+                            <div style={{position: 'relative'}}>
+                                <i className="fas fa-comment" style={{position: 'absolute', left: '15px', top: '17px', color: '#999'}}></i>
+                                <textarea
+                                    className="input"
+                                    placeholder="Describe quality, variety, organic certification, etc."
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                    rows="3"
+                                    style={{paddingLeft: '45px', minHeight: '100px'}}
+                                />
+                            </div>
+                            
+                            <button type="submit" className="button">
+                                <i className="fas fa-rocket"></i> List for Sale
+                            </button>
+                        </form>
+                        <button className="button danger" onClick={() => window.history.back()}>
+                            <i className="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function BuyCropScreen({ crops }) {
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1><i className="fas fa-shopping-basket"></i> Fresh Marketplace</h1>
+                        <p>Quality produce from verified local farmers</p>
+                    </div>
+                    <div className="card">
+                        <h3><i className="fas fa-list"></i> Available Produce ({crops.length} items)</h3>
+                        {crops.length === 0 ? (
+                            <div style={{textAlign: 'center', padding: '40px 0'}}>
+                                <i className="fas fa-inbox" style={{fontSize: '48px', color: '#ccc', marginBottom: '15px'}}></i>
+                                <p style={{color: '#666', marginBottom: '20px'}}>No crops available at the moment.</p>
+                                <p style={{fontSize: '14px', color: '#999'}}>Check back later for fresh listings!</p>
+                            </div>
+                        ) : (
+                            crops.map(crop => (
+                                <div key={crop.id} className="crop-item">
+                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px'}}>
+                                        <div className="crop-name">
+                                            <i className="fas fa-seedling" style={{color: '#4CAF50', marginRight: '8px'}}></i>
+                                            {crop.crop_name}
+                                        </div>
+                                        <div className="price-tag">
+                                            ₹{crop.price_per_kg}/kg
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="crop-details">
+                                        <i className="fas fa-weight" style={{color: '#2196F3', marginRight: '8px'}}></i>
+                                        Available: {crop.quantity_kg} kg
+                                    </div>
+                                    
+                                    <div className="crop-details">
+                                        <i className="fas fa-map-marker-alt" style={{color: '#FF9800', marginRight: '8px'}}></i>
+                                        {crop.location}
+                                    </div>
+                                    
+                                    <div className="crop-details">
+                                        <i className="fas fa-calculator" style={{color: '#9C27B0', marginRight: '8px'}}></i>
+                                        Total Value: ₹{(crop.quantity_kg * crop.price_per_kg).toFixed(2)}
+                                    </div>
+                                    
+                                    {crop.notes && (
+                                        <div style={{marginTop: '10px', padding: '10px', background: '#f8f9fa', borderRadius: '8px'}}>
+                                            <i className="fas fa-info-circle" style={{color: '#666', marginRight: '8px'}}></i>
+                                            <span style={{fontSize: '14px', color: '#666'}}>{crop.notes}</span>
+                                        </div>
+                                    )}
+                                    
+                                    <div style={{display: 'flex', gap: '10px', marginTop: '15px'}}>
+                                        <button className="button secondary" style={{flex: 1}}>
+                                            <i className="fas fa-phone"></i> Call Seller
+                                        </button>
+                                        <button className="button" style={{flex: 1}}>
+                                            <i className="fas fa-comment"></i> Send Message
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                        
+                        <div style={{textAlign: 'center', marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px'}}>
+                            <i className="fas fa-shield-alt" style={{color: '#4CAF50', marginRight: '8px'}}></i>
+                            <span style={{fontSize: '14px', color: '#666'}}>All sellers are verified • Quality assured • Direct from farm</span>
+                        </div>
+                        
+                        <button className="button danger" onClick={() => window.history.back()}>
+                            <i className="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

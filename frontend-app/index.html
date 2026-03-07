@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agriculture AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .input::placeholder {
+            color: #999;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .button:hover::before {
+            left: 100%;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button.secondary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .button.secondary:hover {
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+        
+        .button.danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+        
+        .button.danger:hover {
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .feature-button {
+            padding: 20px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .feature-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+        
+        .result-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-value {
+            color: #666;
+            margin-top: 8px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .crop-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .crop-item:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .crop-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .crop-details {
+            color: #666;
+            margin: 8px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-input {
+            margin-bottom: 20px;
+        }
+        
+        .file-input input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #4CAF50;
+            border-radius: 12px;
+            background: rgba(76, 175, 80, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input input[type="file"]:hover {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #45a049;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(76, 175, 80, 0.3);
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .confidence-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .confidence-high {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+        
+        .confidence-medium {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+        }
+        
+        .confidence-low {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .treatment-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .treatment-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2196F3;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .treatment-content {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        textarea.input {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .price-tag {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-seedling"></i> Smart Agriculture AI</h1>
+                <p>Transform your farming with AI technology</p>
+            </div>
+            
+            <div id="loginScreen" class="screen">
+                <div class="card">
+                    <h3><i class="fas fa-sign-in-alt"></i> Welcome Back</h3>
+                    <form id="loginForm">
+                        <div style="position: relative;">
+                            <i class="fas fa-envelope" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="email" class="input" placeholder="Enter your email address" required style="padding-left: 45px;">
+                        </div>
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="password" class="input" placeholder="Enter your password" required style="padding-left: 45px;">
+                        </div>
+                        <button type="submit" class="button">
+                            <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                        </button>
+                    </form>
+                    <button class="button secondary" onclick="showScreen('registerScreen')">
+                        <i class="fas fa-user-plus"></i> Don't have an account? Register
+                    </button>
+                </div>
+            </div>
+            
+            <div id="registerScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-user-circle"></i> Get Started Today</h3>
+                    <form id="registerForm">
+                        <div style="position: relative;">
+                            <i class="fas fa-user" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="text" class="input" placeholder="Enter your full name" required style="padding-left: 45px;">
+                        </div>
+                        <div style="position: relative;">
+                            <i class="fas fa-envelope" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="email" class="input" placeholder="Enter your email address" required style="padding-left: 45px;">
+                        </div>
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="password" class="input" placeholder="Create a strong password (min 6 characters)" required minlength="6" style="padding-left: 45px;">
+                        </div>
+                        <button type="submit" class="button">
+                            <i class="fas fa-rocket"></i> Start Your Journey
+                        </button>
+                    </form>
+                    <button class="button secondary" onclick="showScreen('loginScreen')">
+                        <i class="fas fa-sign-in-alt"></i> Already have an account? Login
+                    </button>
+                </div>
+            </div>
+            
+            <div id="homeScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-th-large"></i> Smart Services</h3>
+                    <div class="feature-grid">
+                        <button class="feature-button" onclick="showScreen('scanScreen')">
+                            <i class="fas fa-camera"></i> Scan Crop Disease
+                        </button>
+                        <button class="feature-button" onclick="showScreen('sellScreen')">
+                            <i class="fas fa-store"></i> Sell Your Produce
+                        </button>
+                        <button class="feature-button" onclick="showScreen('buyScreen')">
+                            <i class="fas fa-shopping-cart"></i> Buy Fresh Crops
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Your Farm Dashboard</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label"><i class="fas fa-search"></i> Crops Scanned Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label"><i class="fas fa-list"></i> Active Listings</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">📈</div>
+                            <div class="stat-label"><i class="fas fa-trending-up"></i> Market Price Trend</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div class="result-item">
+                        <div class="result-label">Latest Scan</div>
+                        <div class="result-value">Tomato disease detected - Early Blight</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Recent Sale</div>
+                        <div class="result-value">Sold 50kg of organic tomatoes</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Purchase</div>
+                        <div class="result-value">Bought fresh potatoes from local farm</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scanScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-camera-retro"></i> Capture & Analyze</h3>
+                    <div class="file-input">
+                        <input type="file" id="imageUpload" accept="image/*">
+                        <p style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;">
+                            <i class="fas fa-info-circle"></i> Supported formats: JPG, PNG, HEIC
+                        </p>
+                    </div>
+                    <div id="loadingDiv" class="loading hidden">
+                        <div class="loading-spinner"></div>
+                        <p><i class="fas fa-brain"></i> AI is analyzing your crop...</p>
+                        <p style="font-size: 14px; margin-top: 10px;">This usually takes 10-15 seconds</p>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                            <div style="text-align: center;">
+                                <i class="fas fa-check-circle" style="font-size: 24px; color: #4CAF50;"></i>
+                                <p style="font-size: 12px; margin-top: 5px;">99% Accuracy</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <i class="fas fa-clock" style="font-size: 24px; color: #2196F3;"></i>
+                                <p style="font-size: 12px; margin-top: 5px;">Instant Results</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <i class="fas fa-seedling" style="font-size: 24px; color: #FF9800;"></i>
+                                <p style="font-size: 12px; margin-top: 5px;">40+ Diseases</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="button danger" onclick="showScreen('homeScreen')">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </button>
+                </div>
+            </div>
+            
+            <div id="resultScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-virus"></i> Disease Detection</h3>
+                    <div class="confidence-badge confidence-high">
+                        <i class="fas fa-chart-line"></i> 92% - High Confidence
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label"><i class="fas fa-bug"></i> Detected Disease:</div>
+                        <div class="result-value" style="font-size: 18px; font-weight: 600; color: #333;">
+                            Tomato Early Blight
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-pills"></i> Treatment Plan</h3>
+                    <div class="treatment-section">
+                        <div class="treatment-title">
+                            <i class="fas fa-prescription-bottle"></i> Recommended Medicine
+                        </div>
+                        <div class="treatment-content">
+                            Mancozeb, Chlorothalonil - Apply every 7-10 days
+                        </div>
+                    </div>
+                    
+                    <div class="treatment-section">
+                        <div class="treatment-title">
+                            <i class="fas fa-flask"></i> Fertilizer Treatment
+                        </div>
+                        <div class="treatment-content">
+                            NPK (balanced), Potassium-rich fertilizer
+                        </div>
+                    </div>
+                    
+                    <div class="treatment-section">
+                        <div class="treatment-title">
+                            <i class="fas fa-lightbulb"></i> Prevention Tips
+                        </div>
+                        <div class="treatment-content">
+                            Avoid overwatering, ensure proper spacing, remove infected leaves, rotate crops annually
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <button class="button" onclick="showScreen('scanScreen')">
+                        <i class="fas fa-redo"></i> Scan Another Crop
+                    </button>
+                    <button class="button secondary" onclick="showScreen('homeScreen')">
+                        <i class="fas fa-home"></i> Back to Dashboard
+                    </button>
+                </div>
+            </div>
+            
+            <div id="sellScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-tag"></i> Create Listing</h3>
+                    <form id="sellForm">
+                        <div style="position: relative;">
+                            <i class="fas fa-seedling" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="text" class="input" placeholder="What are you selling? (e.g., Tomatoes, Wheat) *" required style="padding-left: 45px;">
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <div style="position: relative; flex: 1;">
+                                <i class="fas fa-weight" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                                <input type="number" class="input" placeholder="Quantity (kg) *" required style="padding-left: 45px;">
+                            </div>
+                            <div style="position: relative; flex: 1;">
+                                <i class="fas fa-rupee-sign" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                                <input type="number" class="input" placeholder="Price per kg *" required style="padding-left: 45px;">
+                            </div>
+                        </div>
+                        
+                        <div style="position: relative;">
+                            <i class="fas fa-map-marker-alt" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <input type="text" class="input" placeholder="Your location (city, state) *" required style="padding-left: 45px;">
+                        </div>
+                        
+                        <div style="position: relative;">
+                            <i class="fas fa-comment" style="position: absolute; left: 15px; top: 17px; color: #999;"></i>
+                            <textarea class="input" placeholder="Describe quality, variety, organic certification, etc." style="padding-left: 45px; min-height: 100px;"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="button">
+                            <i class="fas fa-rocket"></i> List for Sale
+                        </button>
+                    </form>
+                    <button class="button danger" onclick="showScreen('homeScreen')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+            
+            <div id="buyScreen" class="screen hidden">
+                <div class="card">
+                    <h3><i class="fas fa-list"></i> Available Produce (3 items)</h3>
+                    
+                    <div class="crop-item">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div class="crop-name">
+                                <i class="fas fa-seedling" style="color: #4CAF50; margin-right: 8px;"></i>
+                                Tomatoes
+                            </div>
+                            <div class="price-tag">
+                                ₹25/kg
+                            </div>
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-weight" style="color: #2196F3; margin-right: 8px;"></i>
+                            Available: 50 kg
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-map-marker-alt" style="color: #FF9800; margin-right: 8px;"></i>
+                            Bengaluru
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-calculator" style="color: #9C27B0; margin-right: 8px;"></i>
+                            Total Value: ₹1250.00
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <i class="fas fa-info-circle" style="color: #666; margin-right: 8px;"></i>
+                            <span style="font-size: 14px; color: #666;">Fresh organic tomatoes</span>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="button secondary" style="flex: 1;">
+                                <i class="fas fa-phone"></i> Call Seller
+                            </button>
+                            <button class="button" style="flex: 1;">
+                                <i class="fas fa-comment"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="crop-item">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div class="crop-name">
+                                <i class="fas fa-seedling" style="color: #4CAF50; margin-right: 8px;"></i>
+                                Potatoes
+                            </div>
+                            <div class="price-tag">
+                                ₹20/kg
+                            </div>
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-weight" style="color: #2196F3; margin-right: 8px;"></i>
+                            Available: 100 kg
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-map-marker-alt" style="color: #FF9800; margin-right: 8px;"></i>
+                            Mumbai
+                        </div>
+                        
+                        <div class="crop-details">
+                            <i class="fas fa-calculator" style="color: #9C27B0; margin-right: 8px;"></i>
+                            Total Value: ₹2000.00
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <i class="fas fa-info-circle" style="color: #666; margin-right: 8px;"></i>
+                            <span style="font-size: 14px; color: #666;">Premium quality potatoes</span>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="button secondary" style="flex: 1;">
+                                <i class="fas fa-phone"></i> Call Seller
+                            </button>
+                            <button class="button" style="flex: 1;">
+                                <i class="fas fa-comment"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 12px;">
+                        <i class="fas fa-shield-alt" style="color: #4CAF50; margin-right: 8px;"></i>
+                        <span style="font-size: 14px; color: #666;">All sellers are verified • Quality assured • Direct from farm</span>
+                    </div>
+                    
+                    <button class="button danger" onclick="showScreen('homeScreen')">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+        
+        // Form handlers
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login successful! Welcome to Smart Agriculture AI.');
+            showScreen('homeScreen');
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Registration successful! Please login.');
+            showScreen('loginScreen');
+        });
+        
+        document.getElementById('sellForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your crop has been listed successfully!');
+            showScreen('homeScreen');
+        });
+        
+        // Image upload handler
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Show loading
+                document.getElementById('loadingDiv').classList.remove('hidden');
+                
+                // Simulate AI analysis
+                setTimeout(function() {
+                    document.getElementById('loadingDiv').classList.add('hidden');
+                    showScreen('resultScreen');
+                }, 2000);
+            }
+        });
+        
+        // Update header when on home screen
+        const originalHeader = document.querySelector('.header');
+        const homeObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.target.id === 'homeScreen' && !mutation.target.classList.contains('hidden')) {
+                    originalHeader.querySelector('h1').innerHTML = '<i class="fas fa-leaf"></i> Smart Agriculture AI';
+                    originalHeader.querySelector('p').textContent = 'Welcome back, Farmer! 🌱';
+                } else if (mutation.target.id === 'loginScreen' && !mutation.target.classList.contains('hidden')) {
+                    originalHeader.querySelector('h1').innerHTML = '<i class="fas fa-seedling"></i> Smart Agriculture AI';
+                    originalHeader.querySelector('p').textContent = 'Transform your farming with AI technology';
+                }
+            });
+        });
+        
+        document.querySelectorAll('.screen').forEach(screen => {
+            homeObserver.observe(screen, { attributes: true, attributeFilter: ['class'] });
+        });
+    </script>
+</body>
+</html>

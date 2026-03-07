@@ -1,0 +1,104 @@
+{
+  "vendors": [
+    {
+      "id": "v001",
+      "name": "GreenLife Agro Store",
+      "location": "Bengaluru, Karnataka",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "medicines": ["Mancozeb", "Chlorothalonil", "Copper Oxychloride", "Carbendazim"],
+      "contact": "+91-80-23456789",
+      "rating": 4.5
+    },
+    {
+      "id": "v002", 
+      "name": "Farmers Choice Solutions",
+      "location": "Pune, Maharashtra",
+      "latitude": 18.5204,
+      "longitude": 73.8567,
+      "medicines": ["Mancozeb", "Sulfur", "Neem Oil", "Bordeaux Mixture"],
+      "contact": "+91-20-34567890",
+      "rating": 4.7
+    },
+    {
+      "id": "v003",
+      "name": "AgriCare Essentials",
+      "location": "Hyderabad, Telangana", 
+      "latitude": 17.3850,
+      "longitude": 78.4867,
+      "medicines": ["Chlorothalonil", "Thiram", "Zineb", "Captan"],
+      "contact": "+91-40-45678901",
+      "rating": 4.3
+    },
+    {
+      "id": "v004",
+      "name": "Rural Farm Supplies",
+      "location": "Chennai, Tamil Nadu",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "medicines": ["Copper Oxychloride", "Mancozeb", "Carbendazim", "Thiophanate"],
+      "contact": "+91-44-56789012",
+      "rating": 4.6
+    },
+    {
+      "id": "v005",
+      "name": "Organic Farm Hub",
+      "location": "Kochi, Kerala",
+      "latitude": 9.9312,
+      "longitude": 76.2673,
+      "medicines": ["Neem Oil", "Bordeaux Mixture", "Sulfur", "Copper Soap"],
+      "contact": "+91-484-67890123",
+      "rating": 4.8
+    },
+    {
+      "id": "v006",
+      "name": "Crop Protection Center",
+      "location": "Jaipur, Rajasthan",
+      "latitude": 26.9124,
+      "longitude": 75.7873,
+      "medicines": ["Mancozeb", "Chlorothalonil", "Carbendazim", "Metalaxyl"],
+      "contact": "+91-141-78901234",
+      "rating": 4.4
+    },
+    {
+      "id": "v007",
+      "name": "Smart Agro Solutions",
+      "location": "Lucknow, Uttar Pradesh",
+      "latitude": 26.8467,
+      "longitude": 80.9462,
+      "medicines": ["Thiram", "Zineb", "Captan", "Iprodione"],
+      "contact": "+91-522-89012345",
+      "rating": 4.5
+    },
+    {
+      "id": "v008",
+      "name": "Green Valley Supplies",
+      "location": "Bhopal, Madhya Pradesh",
+      "latitude": 23.2599,
+      "longitude": 77.4126,
+      "medicines": ["Copper Oxychloride", "Sulfur", "Neem Oil", "Karate"],
+      "contact": "+91-755-90123456",
+      "rating": 4.2
+    },
+    {
+      "id": "v009",
+      "name": "Farm Tech Solutions",
+      "location": "Ahmedabad, Gujarat",
+      "latitude": 23.0225,
+      "longitude": 72.5714,
+      "medicines": ["Mancozeb", "Thiophanate", "Carbendazim", "Tebuconazole"],
+      "contact": "+91-79-01234567",
+      "rating": 4.6
+    },
+    {
+      "id": "v010",
+      "name": "Nature Care Agro",
+      "location": "Indore, Madhya Pradesh",
+      "latitude": 22.7196,
+      "longitude": 75.8577,
+      "medicines": ["Neem Oil", "Bordeaux Mixture", "Copper Soap", "Pyrethrum"],
+      "contact": "+91-731-23456789",
+      "rating": 4.7
+    }
+  ]
+}
