@@ -1,3 +1,0 @@
-# Place PlantVillage dataset here
-# Structure: dataset/train/class_name/image.jpg
-# Or use: python download_dataset.py
