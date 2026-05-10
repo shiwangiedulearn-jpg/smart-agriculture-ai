@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 12
+names: ['Apple_Black_Rot', 'Apple_Healthy', 'Apple_Rust', 'Apple_Scab', 'Corn_Common_Rust', 'Corn_Healthy', 'Corn_Leaf_Blight', 'Potato_Early_blight', 'Potato_healthy', 'Potato_late_Blight', 'Tomato_Bacterial_Spot', 'Tomato_mosaic_virus']
+
+roboflow:
+  workspace: shiwangi-uahoi
+  project: plant-disease-iiyyk-30fj2
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shiwangi-uahoi/plant-disease-iiyyk-30fj2/dataset/1
