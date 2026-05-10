@@ -1,4 +1,6 @@
 streamlit
 ultralytics
-PyYAML
-Pillow
+pyyaml
+pillow
+torch
+torchvision
