@@ -5,7 +5,22 @@ from PIL import Image
 from treatment import treatment
 
 # Load model
-model = YOLO("plant_disease_data/runs/detect/train/weights/best.pt")
+import os
+from ultralytics import YOLO
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "plant_disease_data",
+    "runs",
+    "detect",
+    "train",
+    "weights",
+    "best.pt"
+)
+
+model = YOLO(MODEL_PATH)
 
 # Load class names
 with open("plant_disease_data\data.yaml", "r") as f:
