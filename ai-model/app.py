@@ -5,7 +5,7 @@ from PIL import Image
 from treatment import treatment
 
 # Load model
-model = YOLO(r"D:\smart-agriculture-ai\ai-model\plant_disease_data\runs\detect\train\weights\best.pt")
+model = YOLO(r"runs\detect\train\weights\best.pt")
 
 # Load class names
 with open("plant_disease_data\data.yaml", "r") as f:
