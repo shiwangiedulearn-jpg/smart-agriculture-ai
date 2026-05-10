@@ -23,7 +23,9 @@ MODEL_PATH = os.path.join(
 model = YOLO(MODEL_PATH)
 
 # Load class names
-with open("plant_disease_data\data.yaml", "r") as f:
+DATA_YAML_PATH = os.path.join(BASE_DIR, "plant_disease_data", "data.yaml")
+
+with open(DATA_YAML_PATH, "r") as f:
     data = yaml.safe_load(f)
 
 names = data["names"]
