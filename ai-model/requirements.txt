@@ -1,0 +1,6 @@
+streamlit
+ultralytics
+pyyaml
+pillow
+torch
+torchvision
