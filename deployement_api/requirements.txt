@@ -1,10 +1,10 @@
 fastapi
 uvicorn
-ultralytics
 python-multipart
 pillow
 pyyaml
-opencv-python-headless
+numpy
+opencv-python-headless==4.10.0.84
+ultralytics==8.3.0
 torch
 torchvision
-numpy
