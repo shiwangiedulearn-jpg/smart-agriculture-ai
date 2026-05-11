@@ -7,6 +7,8 @@ from treatment import treatment
 # Load model
 model = YOLO(r"plant_disease_data\runs\detect\train\weights\best.pt")
 
+CONFIDENCE_THRESHOLD = 0.6  
+
 # Load class names
 with open("plant_disease_data\data.yaml", "r") as f:
     data = yaml.safe_load(f)
@@ -32,8 +34,12 @@ if uploaded_file is not None:
           disease = names[cls].replace("___", " ").replace("_", " ")
           conf = float(best_box.conf)
 
-          st.write(f"🦠 Disease: {disease}")
-          st.write(f"📊 Confidence: {conf:.2f}")
+          # Check if confidence is above threshold
+          if conf < CONFIDENCE_THRESHOLD:
+              st.error(f"❌ Invalid Image - Not a leaf or too unclear (Confidence: {conf:.2f})")
+          else:
+              st.write(f"🦠 Disease: {disease}")
+              st.write(f"📊 Confidence: {conf:.2f}")
 
         # show treatment
           if disease in treatment:
