@@ -22,6 +22,8 @@ MODEL_PATH = os.path.join(
 
 model = YOLO(MODEL_PATH)
 
+CONFIDENCE_THRESHOLD = 0.6
+
 # Load class names
 DATA_YAML_PATH = os.path.join(BASE_DIR, "plant_disease_data", "data.yaml")
 
@@ -49,8 +51,11 @@ if uploaded_file is not None:
           disease = names[cls].replace("___", " ").replace("_", " ")
           conf = float(best_box.conf)
 
-          st.write(f"🦠 Disease: {disease}")
-          st.write(f"📊 Confidence: {conf:.2f}")
+          if conf < CONFIDENCE_THRESHOLD:
+              st.error(f"❌ Invalid Image - Not a leaf or too unclear (Confidence: {conf:.2f})")
+          else:
+              st.write(f"🦠 Disease: {disease}")
+              st.write(f"📊 Confidence: {conf:.2f}")
 
         # show treatment
           if disease in treatment:
