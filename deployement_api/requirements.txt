@@ -4,5 +4,6 @@ ultralytics
 python-multipart
 pillow
 pyyaml
+opencv-python-headless
 torch
 torchvision
