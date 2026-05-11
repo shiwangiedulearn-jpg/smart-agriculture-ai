@@ -58,6 +58,6 @@ if uploaded_file is not None:
               st.write(f"📊 Confidence: {conf:.2f}")
 
         # show treatment
-          if disease in treatment:
-              st.write(f"🌿 Fertilizer: {treatment[disease]['fertilizer']}")
-              st.write(f"🛠 Action: {treatment[disease]['action']}")
+              if disease in treatment:
+                 st.write(f"🌿 Fertilizer: {treatment[disease]['fertilizer']}")
+                 st.write(f"🛠 Action: {treatment[disease]['action']}")
